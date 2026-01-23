@@ -889,9 +889,21 @@ def run_cmd(
         else:
             print("    CMD: %s" % cmd)
 
-    exit_code = subprocess.call(
-        cmd, stdin=None, stdout=fh, stderr=subprocess.STDOUT, shell=True
-    )
+    # If timeout is in seconds, add an extra layer of timeout
+    # the timeout linux command failed me on several occasions
+    sp_timeout = int(timeout) + 2 if timeout and timeout.isdigit() else None
+
+    try:
+        exit_code = subprocess.call(
+            cmd, stdin=None, stdout=fh, stderr=subprocess.STDOUT, shell=True,
+            timeout=sp_timeout
+        )
+    except subprocess.TimeoutExpired:
+        if cargs.verbose:
+            if log_file:
+                logr(b"    TIMEOUT: %s" % cmd.encode(errors="namereplace"), log_file, cargs)
+            else:
+                print("    TIMEOUT: %s" % cmd)
 
     fh.close()
 
