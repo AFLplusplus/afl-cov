@@ -35,6 +35,7 @@ import re
 import signal
 import sys
 import time
+import shlex
 from shutil import rmtree
 from shutil import copyfile
 from sys import argv
@@ -877,7 +878,7 @@ def run_cmd(
         fh = open(os.devnull, "wb")
 
     if timeout:
-        cmd = "timeout -s KILL %s %s" % (timeout, cmd)
+        cmd = "timeout -s KILL %s sh -c %s" % (timeout, shlex.quote(cmd))
 
     if aflrun is True and len(fn) > 0:
         cmd = "cat " + fn + " | " + cmd
