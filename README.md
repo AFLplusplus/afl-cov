@@ -156,11 +156,9 @@ generating code coverage data.
 
 [AFL-status-screen]: doc/AFL_status_screen.png "AFL Fuzzing Cycle"
 
-Note that by default `afl-cov` does not direct `lcov` to include branch
-coverage results. This is because there are commonly many hundreds of AFL
-test cases in the `queue/` directory, and generating branch coverage across all
-of these cases may slow `afl-cov` down significantly. If branch coverage is
-desired, just add the `--enable-branch-coverage` argument to `afl-cov`.
+`afl-cov` now passes `--rc lcov_branch_coverage=1` to all `lcov` commands.
+Use `--enable-branch-coverage` when you want branch coverage to be shown in
+`afl-cov` output and lcov web reports.
 
 Here is a sample of what the `afl-cov` output looks like (note this includes
 the `--enable-branch-coverage` argument as described above):

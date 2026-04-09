@@ -684,15 +684,18 @@ def get_cycle_num(id_num: int, cargs: argparse.Namespace) -> int:
     return cycle_num
 
 
-def lcov_gen_coverage(cov_paths: CovPathsDictType, cargs: argparse.Namespace):
-
-    lcov_opts = " --ignore-errors inconsistent "
-    if cargs.enable_branch_coverage:
-        lcov_opts += " --rc lcov_branch_coverage=1"
+def get_lcov_opts(cargs: argparse.Namespace) -> str:
+    lcov_opts = " --ignore-errors inconsistent --rc lcov_branch_coverage=1"
     if cargs.follow:
         lcov_opts += " --follow"
     if cargs.clang:
         lcov_opts += " --gcov-tool afl-clang-cov.sh"
+    return lcov_opts
+
+
+def lcov_gen_coverage(cov_paths: CovPathsDictType, cargs: argparse.Namespace):
+
+    lcov_opts = get_lcov_opts(cargs)
 
     run_cmd(
         cargs.lcov_path
@@ -1002,11 +1005,9 @@ def init_tracking(cov_paths: CovPathsDictType, cargs: argparse.Namespace) -> boo
 
     if not cargs.disable_coverage_init and cargs.coverage_cmd:
 
-        lcov_opts = ""
-        if cargs.enable_branch_coverage:
-            lcov_opts += " --rc lcov_branch_coverage=1 "
-        if cargs.clang:
-            lcov_opts += " --gcov-tool afl-clang-cov.sh"
+        lcov_opts = get_lcov_opts(cargs).replace(
+            " --ignore-errors inconsistent", "", 1
+        )
 
         # reset code coverage counters - this is done only once as
         # afl-cov is spinning up even if AFL is running in parallel mode
