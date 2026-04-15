@@ -1,3 +1,15 @@
+# DEPRECATED PROJECT - use https://github.com/AFLplusplus/cov-analysis instead
+
+**DEPRECATED**
+
+
+Please use this new better tooling instead: **[https://github.com/AFLplusplus/cov-analysis](https://github.com/AFLplusplus/cov-analysis)**
+
+
+**DEPRECATED**
+
+
+
 # afl-cov - AFL Fuzzing Code Coverage
 
 Version: 0.7.0
